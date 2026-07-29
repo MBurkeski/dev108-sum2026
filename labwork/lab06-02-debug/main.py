@@ -15,11 +15,14 @@ print("======================")
 counter = 0
 score_total = 0
 test_score = 0
-again = "y"
 
-# user input request for test scores, updated with float
-while test_score != "999":
-    test_score = float(input("Enter test score (or '999' to quit): "))
+while True:
+    test_score = input("Enter test score (or 'x' to quit): ")
+    if test_score != "x":
+        test_score = int(test_score)
+        counter += 1
+    else:
+        break
     if test_score >= 0 and test_score <= 100:
         score_total += test_score
         counter += 1
