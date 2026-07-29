@@ -55,7 +55,8 @@ def full_name(first_name, last_name):
 
 # lastNameFirst() ex: Stark, Tony
 def last_name_first(last_name, first_name):
-    """A simple function that takes the first_name and last_name inputs and returns a string value with the last name first and the first name last that is concatenated with a space and a comma"""
+    """A simple function that takes the first_name and last_name inputs and returns a string value with the last name first and the first name last that is 
+    concatenated with a space and a comma"""
     print(last_name + ", " + first_name)
     print()
 
@@ -67,11 +68,13 @@ def main():
             print("Hello " + first_name + "!")
             menu = int(menu)
         elif menu == 2:
-            print(first_name, "", last_name)
+            print(first_name, last_name)
         elif menu == 3:
             print(last_name + ", " + first_name)
         elif menu == 4:
-            print(help(say_hello)); print(help(full_name)); print(help(last_name_first))
+            help(say_hello)
+            help(full_name)
+            help(last_name_first)
             continue
         elif menu == 5:
             print("Have a nice day! Goodbye")

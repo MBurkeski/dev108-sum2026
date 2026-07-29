@@ -2,31 +2,30 @@
 
 import nameformat as myNames
 
-def other():
-  # welcome/greeting
-  print("Testing module functions from nameformat")
-  print("Let's call the module function!\n")
 
-  # make a call to the module using the specified namespace defined in line 2 (myNames)
-  myNames.testThis()
-  print()
-  print("--- Example Two ---")
-  print("Let's call the module function and pass an argument.")
-  while True:
-    # a second example using an input and passing the input value to the function defined in the module 
-    print("1 - Say Hello\n2 - Output Full Name\n3 - Output Last Name, First Name\n4 - Read Documentation\n5 - Exit")
-    menu = (input("\nWhat is your choice? "))
-    if menu.isdigit():
-      menu = int(menu)
-      if menu == 5:
-        print("Thanks for playing!")
-        break
-      print()
-      myNames.main()
-    else:
-      print("\n *** Sorry, invalid input. Please try again and input numbers 1-5 only! *** ")
+# main function
+def main():
+    while True:
+        menu = int(input("\nWhat is your choice? "))
+        if menu == 1:
+            print("Hello " + myNames.first_name + "!")
+            menu = int(menu)
+        elif menu == 2:
+            print(myNames.first_name, myNames.last_name)
+        elif menu == 3:
+            print(myNames.last_name + ", " + myNames.first_name)
+        elif menu == 4:
+            help(myNames.say_hello)
+            help(myNames.full_name)
+            help(myNames.last_name_first)
+            continue
+        elif menu == 5:
+            print("Have a nice day! Goodbye")
+            print()
+            break
+        else:
+            print("Sorry, invalid entry. Please input values 1-5 only.")
 
-
-if __name__ == "__other__":
-  other()
- 
+# if started as the main module, call the main function
+if __name__ == "__main__":
+    main()
