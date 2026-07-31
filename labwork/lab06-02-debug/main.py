@@ -17,7 +17,7 @@ def display_title():
     print("The Test Scores application")
     print()
     print("Enter test scores")
-    print("Enter 'x' to end input")
+    print("Enter '999' to end input")
     print("======================")
 >>>>>>> 71b1021 (lab 6 progress ish)
 
@@ -74,12 +74,12 @@ while True:
         print("Test score must be from 0 through 100. Score discarded. Try again.")   
 =======
 def get_scores():
-    test_score = float(input("Enter test score (or 'x' to quit): "))
+    test_score = float(input("Enter test score (or '999' to quit): "))
     while True:
         if test_score >= 0 and test_score <= 100:
             score_total += test_score
             counter += 1
-        elif test_score != "x":
+        elif test_score != "999":
             test_score = (float(test_score))
             counter += 1
         else:
