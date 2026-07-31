@@ -88,7 +88,7 @@ def get_scores():
 
 # calculate average score and total score
 def calculations():
-    average_score = (round(float(score_total / counter)))
+    average_score = (round(score_total / counter))
     # format and display the result
     print("======================")
     print("Total Score:", score_total,
