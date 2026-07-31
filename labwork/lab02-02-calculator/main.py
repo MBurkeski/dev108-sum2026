@@ -27,7 +27,7 @@ width = int(input(firstName + " please enter the width (same units): "))
 area = round(length * width)
 perimeter = round(length + length + width + width)
 
-# format and display results
+# format and display the results
 print("======================")
 print("Area = ",area)
 print("Perimeter = ", perimeter)
