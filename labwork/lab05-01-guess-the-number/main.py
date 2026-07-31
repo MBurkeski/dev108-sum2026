@@ -1,7 +1,7 @@
 # starting Guess the Number program from our textbook (page 125)
 
 # Morgan Burke
-# 7/23/2026
+# 7/26/2026
 # Code Practice Lab 5: Guess the Number program
 
 
@@ -26,10 +26,12 @@ def display_title():
 
 def get_name():
     player_name = input("What is your name? ")
-    print("Hello, ", player_name, ".")
+    print("Hello, " + player_name + "!")
+    print()
 
-def play_game(wins):    # play game function
-    level = input("What game level would you like to play? E is for easy,\nM is for medium, and H is for hard. ")
+def play_game(wins, losses):    # play game function
+    level = input("What game level would you like to play?\n'e' is for easy\n'm' is for medium\n'h' is for hard\nChosen level: ")
+    print()
 
     if level.lower() == "e":
         max_number = 10
@@ -44,7 +46,7 @@ def play_game(wins):    # play game function
         print("Sorry! Invalid input. Please try again.")
 
     number = random.randint(1, max_number)
-    print(f"I'm thinking of a number from 1 to " + str(max_number) +"\n")
+    print(f"I'm thinking of a whole number from 1 to " + str(max_number) + "." + "\n")
     count = 1
 
     while count <= tries:
@@ -56,25 +58,37 @@ def play_game(wins):    # play game function
             print("Too high.")
             count += 1
         elif guess == number:
+            print()
             print(f"You guessed it in " + str(count) + " tries.\n")
-            # count for wins total
+
+            # count for wins and losses total
             wins += 1
             print("You have won ", wins, "game(s).")
-            return wins
+            print("You have lost ", losses, "game(s).")
+            print()
+            return wins, losses
     else:
-        print("Sorry, you ran out of guesses, the number was ", number) 
+        print()
+        print("Sorry, you ran out of guesses, the number was " + str(number) + ".\n")
+        losses += 1
+        print("You have won ", wins, "game(s).")
+        print("You have lost ", losses, "game(s).")
+        print()
+        return wins, losses
 
 def main():     # main function
     display_title()
     get_name()
     # initialize variables
     wins = 0
+    losses = 0
     again = "y"
     while again.lower() == "y":
-        wins = play_game(wins)
+        wins, losses = play_game(wins, losses)
         again = input("Would you like to play again? (y/n): ")
         print()
-    print("No, worries. Have a nice day! Bye!")
+    # exit the program 
+    print("No worries, Have a nice day!")
 
 # if started as the main module, call the main function
 if __name__ == "__main__":
