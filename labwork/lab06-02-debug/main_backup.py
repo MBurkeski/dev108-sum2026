@@ -5,7 +5,8 @@
 
 
 # display a welcome message
-print("The Test Scores application")
+print()
+print("The Test Scores Application")
 print()
 print("Enter test scores")
 print("Enter '999' to end input")
@@ -17,15 +18,14 @@ score_total = 0
 test_score = 0
 
 while True:
-    test_score = input("Enter test score (or 'x' to quit): ")
-    if test_score != "x":
-        test_score = int(test_score)
+    test_score = float(input("Enter test score (or '999' to quit): "))
+    if test_score != 999:
         counter += 1
-    else:
-        break
-    if test_score >= 0 and test_score <= 100:
+    elif test_score >= 0 and test_score <= 100:
         score_total += test_score
         counter += 1
+    else:
+        print("Sorry, invalid entry. Please input test values '0' through '100'.")
 
         # loop to ask for additional test scores to be run
         while True:
@@ -46,8 +46,7 @@ while True:
                     print("Test score must be from 0 through 100. Score discarded. Try again.")   
             else:
                 # exit the program
-                print("Thank you for your participation.")
-                break      
+                print("Thank you for your participation.")  
             
         # calculate average score
         average_score = round(score_total / counter)
@@ -57,10 +56,7 @@ while True:
         print("Total Score:", score_total,
         "\nAverage Score:", average_score)    
         
-    elif test_score == 999:
-        break
-    else:
-        print("Test score must be from 0 through 100. Score discarded. Try again.")   
+ 
 
 # calculate average score
 average_score = round(score_total / counter)
@@ -71,3 +67,4 @@ print("Total Score:", score_total,
       "\nAverage Score:", average_score)
 print()
 print("Bye!")
+
