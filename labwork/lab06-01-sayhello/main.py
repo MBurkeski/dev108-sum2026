@@ -20,7 +20,7 @@ def main():
             help(myNames.last_name_first)
             continue
         elif menu == 5:
-            print("Have a nice day! Goodbye")
+            print("Have a nice day! Goodbye.")
             print()
             break
         else:

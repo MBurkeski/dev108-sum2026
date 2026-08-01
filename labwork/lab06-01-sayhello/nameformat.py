@@ -61,6 +61,7 @@ def last_name_first(last_name, first_name):
     print()
 
 # main function
+# I left this main function section here because I wasn't sure if I needed to run all the functions in this one or only call them from the main one and I was afraid to delete it.
 def main():
     while True:
         menu = int(input("\nWhat is your choice? "))
