@@ -1,5 +1,15 @@
 # Starting file for Exercise 6.1 in our textbook
 
+# Name: Morgan Burke
+# Code Practice Lab 7 (exercise 6.1)
+# 8/1/2026
+
+# In this activity, you will modify the Test Scores program to store the score inputs in a list format. 
+# You will also display some other statistics that you are able to calculate with the list values including:
+# number of scores, low score, high score and median score. 
+# Be sure to follow the exact instructions in our textbook, page 193:
+# to make modifications to the get_scores() function, process_scores() function, and main() function.
+
 def display_welcome():
     print("The Test Scores program")
     print("Enter 'x' to exit")
