@@ -1,16 +1,8 @@
 ## Starting file for Exercise 7.1
 
 # Morgan Burke
-# Code Practice Lab 8 (exercise 7.1 & 7.2)
+# Code Practice Lab 8 (exercise 7.2)
 # 8/1/2026
-
-# Instructions 7.1
-# You will modify the Miles Per Gallon program so that it stores the input data for each calculation in a CSV file. Then you will use this program file to complete Exercise 7-2.  
-# The program output will not need to have any edits made to the display input/output. Everything you add will be behind the scenes. 
-# Review the code and run the program so that you understand the starting point. 
-# Enhance the program so that it creates a simple two-dimensional list. You should be saving the distance, gallons, and calculated MPG in each row of the list. 
-# Enhance the program so that it saves the data from the list (for all inputs) in a file named trips.csv. Do not save the data until the user is done inputting values. 
-# Test the program to make sure it works. You can view the .csv file in Trinket's code editor or an associated program like Notepad or Excel if you are working with a local code editor on your computer.
 
 # Instructions 7.2
 # Continue to modify the Miles Per Gallon program so that it uses the CSV file created in Exercise 7-1.   

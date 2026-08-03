@@ -88,7 +88,7 @@ def main():     # main function
         again = input("Would you like to play again? (y/n): ")
         print()
     # exit the program 
-    print("No worries, Have a nice day!")
+    print("No worries, have a nice day!")
 
 # if started as the main module, call the main function
 if __name__ == "__main__":
