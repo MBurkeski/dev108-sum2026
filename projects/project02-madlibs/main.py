@@ -25,7 +25,8 @@
 print()
 print("Welcome to the Nurse Mad Lib Game!")
 print()
-print("Instructions: \nIn this game, you will be asked to provide words to fill in the blanks of a story.\nYou will have two story options to choose from.\nAfter you have completed your story, you will be asked if you would like to play again.")
+print("Instructions: \nIn this game, you will be asked to provide words to fill in the blanks of a story.\nYou will have two story options to choose from.\n" \
+"After you have completed your story, you will be asked if you would like to play again.")
 print()
 
 # initialize variables
@@ -64,7 +65,7 @@ while again.lower() == "y":
                 verb = input("Please provide a verb (present tense): ")
                 counter += 1
                 print()
-                print(f"{player_name}, here is your story: \n\nThe {adjective1} nurse {name1} was working in the {adjective2} Med Surg unit. They had to take care of {number} patients with {plural_noun}. One patient had a {noun} that needed to be treated, so they had to {verb} quickly to help them. It was a busy day, but {name1} loved their job and helping others.")
+                print(f"{player_name}, here is your story: \n\nThe {adjective1} nurse {name1} was working in the {adjective2} Med Surg unit. They had to take care of {number} patients with {plural_noun}.\nOne patient had a {noun} that needed to be treated, so they had to {verb} quickly to help them. It was a busy day, but {name1} loved their job and helping others.")
                 print()
                 print(f"Congratulations {player_name}, you have completed your story!")
                 print(f"You have created {counter} stories so far!")

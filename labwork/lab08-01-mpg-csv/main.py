@@ -20,15 +20,16 @@
 # list_trips() which will display the data in the trips list before adding any trips to the list.
 # main() enhance to get data from the CSV file and so it adds the last trip that's entered to the trip list after it calculates the MGP then display the data for the updated trips list
 
+
 import csv
 
 # create a filename for our .csv file
 filename = "trips.csv"
 
-def write_trips(trips):
+def write_trips(trip):
     with open(filename, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(trips)
+        writer.writerow(trip)
 
 def read_trips():
     trips= []
@@ -43,7 +44,6 @@ def list_trips(trips):
     for i in range(0, len(trips)):
         trip = trips[i]
         print(str(trip[0]) + "\t\t" + str(trip[1]) + "\t\t" + str(trip[2]))
-        print()
 
 def get_miles_driven():
     while True:
@@ -85,10 +85,12 @@ def main():
         trip.append(miles_driven)
         trip.append(gallons_used)
         trip.append(mpg)
+
         # now append this entire row to my trips list
         trips.append(trip)
+        
         # be sure to write this row of data before accepting more data
-        write_trips(trips)
+        write_trips(trip)
 
         list_trips(trips)
         more = input("More entries? (y or n): ")
