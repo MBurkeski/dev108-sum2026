@@ -75,9 +75,5 @@ while choice == "y":
 
     choice = input("Would you like to continue? (y/n): ")    
     print()
-    
-while choice == "n":
-    print("Thank you, bye!")
-else:
-    print("Input error. Please use 'y' for yes or 'n' for no. Please try again.")
-    print()
+
+print("Thank you, bye!")
