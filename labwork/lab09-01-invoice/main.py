@@ -73,7 +73,7 @@ while choice == "y":
     print(f"Invoice total:          ${invoice_total:>12,.2f}")
     print()
 
-    choice = input("Would you like to continue? (y/n): ")    
+    choice = input("Would you like to continue? (y/n):  ")    
     print()
 
 print("Thank you, bye!")

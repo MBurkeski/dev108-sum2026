@@ -29,7 +29,7 @@ def title():
     print("Please follow the prompts below to validate your account.")
     print()
     print("-" * 100)
-    print("Account Validation Program")
+    print("Account Validation Program ")
     print("-" * 100)   
     
 # function to get the full name from the user    
