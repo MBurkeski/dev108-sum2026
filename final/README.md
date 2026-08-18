@@ -194,6 +194,9 @@ ChatGPT was used to help me work out some bugs. I had trouble reformatting my ba
 # Link to Github Repo
 https://github.com/MBurkeski/dev108-sum2026/tree/main/final
 
+# Link to permalink
+https://github.com/MBurkeski/dev108-sum2026/tree/004bdb3d9a939b6b1856e44dd978f3fe2d1250d0/final
+
 # Additional Info:
 I reviewed the suggestions from the discussion board on the project 3 since this is a modification of that project. It took me forever to make so it made more sense to modify that code to save time creating this one.
 I added a better description and created options for the user to choose from if they didn't want to create thier own. 
