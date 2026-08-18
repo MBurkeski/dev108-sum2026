@@ -56,23 +56,59 @@
 
 import random 
 import csv
+import time
 
 # create a filename for our .csv file
 filename = "characters.csv"
 
-# function to write character names in the CSV file
-def write_characters(character):
-    with open(filename, "a", newline="") as file:
+# write all characters in the CSV file
+def write_characters(characters):
+    with open(filename, "w", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow(character)
+        writer.writerow([
+            "Character Number",
+            "Character Name",
+            "Character Type",
+            "Strength",
+            "Intellect",
+            "Charisma",
+            "Speed",
+            "Hit Points",
+            "Wins",
+            "Losses"]) 
+    # actually puts the info in the rows of the CSV file
+        writer.writerows(characters)
 
-# function to read character names in the CSV file
+# read characters from the CSV file
 def read_characters():
-    characters= []
-    with open(filename, newline="") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            characters.append(row)
+    characters = []
+
+    try:
+        with open(filename, newline="") as file:
+            reader = csv.reader(file)
+            # Skip the header row.
+            next(reader, None)
+            for row in reader:
+                # Only accept rows with all 10 required columns.
+                if len(row) == 10:
+                    characters.append(row)
+
+    except FileNotFoundError:
+        pass
+
+    # If there are no valid characters, create six preloaded characters.
+    if len(characters) == 0:
+        characters = [
+            [1, "Shadow", "Human Warrior", 18, 12, 15, 17, 55, 0, 0],
+            [2, "Blaze", "Dragon Rider", 20, 10, 14, 16, 60, 0, 0],
+            [3, "Ragnar", "Troll Princess", 19, 8, 11, 9, 58, 0, 0],
+            [4, "Nova", "Wizard", 10, 20, 18, 13, 45, 0, 0],
+            [5, "Ember", "Elf Archer", 15, 17, 16, 20, 50, 0, 0],
+            [6, "Spirit", "Mystical Fairy", 8, 19, 20, 18, 40, 0, 0]]
+
+        # Save the six characters to the CSV file.
+        write_characters(characters)
+
     return characters
 
 # program title
@@ -96,282 +132,508 @@ def description():
 def display_menu():
     print()
     print("**********PLAYER MENU**********")
-    print("list - List all players")
-    print("add -  Add a character")
-    print("del -  Delete a character")
-    print("find - Find a character by name")
-    print("play - Play the program battle")
-    print("exit - Exit program")
+    print("1. List all characters")
+    print("2. Add a character")
+    print("3. Delete a character")
+    print("4. Find a character")
+    print("5. Play a battle")
+    print("6. Exit")
     print()    
 
 # function to list all characters
-def list(character_list):
-    if len(character_list) == 0:
+def list_characters(characters):
+    if len(characters) == 0:
         print("There are no characters in the list.\n")
         return
-    else:
-        i = 1
-        for character in character_list:
-            row = character
-            print(str(i) + ". " + row[0] # list the character name
-            + " (" + str(row[1]) + ")" # list the character type
-            + " @ " + str(row[2])) # list the character strength
 
-            i += 1
-        print()
+    print("\nCurrent Character List:\n")
 
-# function to list character names in the program
-def list_characters(characters):
-    print("Here is the current list of character options:")
-    print()
-    print("Character Name\t\tCharacter Type\t\tStrength\t\tIntellect\t\tCharisma\t\tSpeed\t\tHit Points")
-    for i in range(0, len(characters)):
-        character = characters[i]
-        print(str(character[0]) + "\t\t" + str(character[1]) + "\t\t" + str(character[2])+ "\t\t" + str(character[3])+ "\t\t" + str(character[4]) + "\t\t" + str(character[5]) + "\t\t" + str(character[6]))
+    print(
+        f"{'No.':<5}"
+        f"{'NAME':<15}"
+        f"{'TYPE':<20}"
+        f"{'STRENGTH':<12}"
+        f"{'INTELLECT':<12}"
+        f"{'CHARISMA':<12}"
+        f"{'SPEED':<10}"
+        f"{'HIT POINTS':<12}"
+        f"{'WINS':<8}"
+        f"{'LOSSES':<8}")
 
-# function to add a new character to the list
-def add(character_list):
-    name = input("Character Name: ")
-    type = (input("Character Type: "))
-    strength = int(input("Strength: "))
-    intellect = int(input("Intellect: "))
-    charisma = int(input("Charisma: "))
-    speed = int(input("Speed: "))
-    hit_points = int(input("Hit Points: "))
-    character = []
-    character.append(name)
-    character.append(type)
-    character.append(strength)
-    character.append(intellect)
-    character.append(charisma)
-    character.append(speed)
-    character.append(hit_points)
-    character_list.append(character)
-    print(character[0] + " was added.\n")
+    print("-" * 124)
+
+    for character in characters:
+        print(
+            f"{character[0]:<5}"
+            f"{character[1]:<15}"
+            f"{character[2]:<20}"
+            f"{character[3]:<12}"
+            f"{character[4]:<12}"
+            f"{character[5]:<12}"
+            f"{character[6]:<10}"
+            f"{character[7]:<12}"
+            f"{character[8]:<8}"
+            f"{character[9]:<8}")
+    print()      
+
+# Ask for a name, create a random character, and save it to the CSV.
+def add_character(characters):
+    name = input("Character Name: ").strip()
+
+    # Make sure the user enters a name.
+    while name == "":
+        print("Character name cannot be blank. Please enter a name.")
+        name = input("Character Name: ").strip()
+
+    # Check whether the name is already being used.
+    for character in characters:
+        if character[1].lower() == name.lower():
+            print("That character name is already being used. Please try again.")
+            return
+
+    # Create the new character.
+    character = create_character(name, characters)
+
+    # Add the character to the list.
+    characters.append(character)
+
+    # Save the updated list to the CSV.
+    write_characters(characters)
+
+    # Display the new character.
+    print("\n" + "=" * 45)
+    print("CHARACTER CREATED!")
+    print("=" * 45)
+    print(f"Name:       {character[1]}")
+    print(f"Type:       {character[2]}")
+    print(f"Strength:   {character[3]}")
+    print(f"Intellect:  {character[4]}")
+    print(f"Charisma:   {character[5]}")
+    print(f"Speed:      {character[6]}")
+    print(f"Hit Points: {character[7]}")
+    print(f"Wins:       {character[8]}")
+    print(f"Losses:     {character[9]}")
+    print("-" * 45)
 
 # function to delete a character
-def delete(character_list):
-    number = int(input("Number: "))
-    if number < 1 or number > len(character_list):
-        print("Invalid character number.\n")
-    else:
-        ask = input("Are you sure you want to delete this character? (y/n) ")
-        while True:
-            if ask.lower() == "y":
-                character = character_list.pop(number-1)
-                print(character[0] + " was deleted.\n")
-            elif ask.lower() == "n":
-                print(character[0] + " was not deleted.\n")
-                return display_menu
-            else:
-                print("Invalid entry.\n")
-                return ask
+def delete_character(characters):
+    name = input("Enter the name of the character you want to delete: ").strip()
 
-def find_by_name(character_list):
-    name = (input("Character Name: "))
-    for character in character_list:
-        if (character[0]) == name:
-            print(character[0] + " is ready to battle if you are.")
-            display_character(character[0])
+    # Check whether the character exists.
+    found_character = None
+
+    for character in characters:
+        if character[1].lower() == name.lower():
+            found_character = character
+            break
+
+    # If the character was not found, stop the function.
+    if found_character is None:
+        print(f"\nNo character named '{name}' was found.")
+        return
+
+    # Show the character before deleting.
+    print(f"\nYou selected: {found_character[1]}")
+
+    # Ask for confirmation.
+    confirmation = input("Are you sure you want to delete this character? (y/n): ").strip().lower()
+    if confirmation == "y":
+        characters.remove(found_character)
+
+        # Rewrite the CSV so the deleted character is removed from the file.
+        write_characters(characters)
+        print(f"\n{found_character[1]} was deleted successfully.")
+
+    elif confirmation == "n":
+        print(f"\n{found_character[1]} was not deleted.")
+        return
+
+    else:
+        print("\nInvalid response. Please enter 'y' or 'n'.")
+        return 
+
+def find_by_name(characters):
+    name = input("Character Name: ").strip()
+
+    found = False
+
+    for character in characters:
+        if character[1].lower() == name.lower():
+            print("Your character was found:")
+            print("-" * 50)
+            print(f"Name:       {character[1]}")
+            print(f"Type:       {character[2]}")
+            print(f"Strength:   {character[3]}")
+            print(f"Intellect:  {character[4]}")
+            print(f"Charisma:   {character[5]}")
+            print(f"Speed:      {character[6]}")
+            print(f"Hit Points: {character[7]}")
+            print(f"Wins:       {character[8]}")
+            print(f"Losses:     {character[9]}")
+            print("-" * 50)
+            print("Your character is ready to battle if you are.")
+            found = True
+            break
+
+    if not found:
+        print(f"\nNo character named '{name}' was found.\n")
         print()
 
-# ask player name
-def get_character_name():
-    print("For a character name, you can:\n" \
-    "1. Choose a character name from the options in the character list\n" \
-    "2. Have the program generate one for you by typing 'random'\n" \
-    "3. Create one yourself")
-    name = input("Please enter a character name: ").strip()
-    # generate a random name if player doesn't enter one in
-    while True:
-        if name.lower() == "":
-            names = ["Shadow", "Blaze", "Ragnar", "Nova", "Ember", "Spirit"] 
-        elif name.lower() == "random":
-            name = random.choice(names)
-        else:
-            character = []
-            character.append(name)
-            character_list.append(character)
-        return name
-
-# function to generate random character 
+# function to generate random character type
 def generate_character_type():
-    character_types = ["Human Warrior", "Elf Archer", "Wizard", "Dragon Rider", "Troll Princess", "Mystical Fairy"]
+    character_types = [
+        "Human Warrior", 
+        "Elf Archer", 
+        "Wizard", 
+        "Dragon Rider", 
+        "Troll Princess", 
+        "Mystical Fairy"]
     return random.choice(character_types)
 
 # function create a character and passes the name as a parameter
-def create_character(name):
-    character = {}
+def create_character(name, characters):
+    character_number = 1
+    for character in characters:
+        if int(character[0]) >= character_number:
+            character_number = int(character[0]) + 1
+    character_type = generate_character_type()
 
-    character["name"] = name
-    character["type"] = generate_character_type()
+    strength = random.randint(5, 20)
+    intellect = random.randint(5, 20)
+    charisma = random.randint(5, 20)
+    speed = random.randint(5, 20)
+    hit_points = random.randint(30, 60)
 
-    # generates random stats for characters
-    character["strength"] = random.randint(5, 20)
-    character["intellect"] = random.randint(5, 20)
-    character["charisma"] = random.randint(5, 20)
-    character["speed"] = random.randint(5, 20)
-    character["hit_points"] = random.randint(30, 60)
+    character = [
+        character_number,
+        name,
+        character_type,
+        strength,
+        intellect,
+        charisma,
+        speed,
+        hit_points,
+        0,
+        0]
+
     return character
 
-
-# function displays all character information
-def display_character(character):
-    print("\n" + "=" * 45) 
-    print(" YOUR CHARACTER INFORMATION") 
-    print("=" * 45) 
-    print(f"Name: {character['name']}") 
-    print(f"Type: {character['type']}") 
-    print(f"Strength: {character['strength']}") 
-    print(f"Intellect: {character['intellect']}") 
-    print(f"Charisma: {character['charisma']}") 
-    print(f"Speed: {character['speed']}") 
-    print(f"Hit Points: {character['hit_points']}") 
-    print("=" * 45)
+# user to choose two characters or have the program choose randomly.
+def choose_battle_characters(characters):
+    if len(characters) < 2:
+        print("\nYou need at least two characters to start a battle.")
+        return None, None
+    
+    print("\n" + "=" * 50)
+    print("             CHOOSE YOUR BATTLE CHARACTERS")
+    print("=" * 50)
+    print("For this battle, you can either:")
+    print("1. Choose two characters")
+    print("2. Choose characters randomly")
     print()
 
-# battle function between characters
-# Characters attack each other until one reaches 0 HP.
-# Characters also have a chance to heal during battle.
-def battle(character1, character2): 
-    print("\n" + "=" * 55) 
-    print(" BATTLE ARENA") 
-    print("=" * 55)
-    print(f"\n{character1['name']} the {character1['type']} " f"vs. {character2['name']} the {character2['type']}!")
+    while True:
+        choice = input("Choose an option (1-2): ").strip()
+        if choice == "1":
+            list_characters(characters)
 
-# Save the original hit points so the character can be used again. 
-    character1["current_hp"] = character1["hit_points"] 
-    character2["current_hp"] = character2["hit_points"]
+            while True:
+                first_name = input("\nEnter the first character's name: ").strip()
+                first_character = None
+                for character in characters:
+                    if character[1].lower() == first_name.lower():
+                        first_character = character
+                        break
+
+                if first_character is not None:
+                    break
+                print("Character not found. Please try again.")
+            
+            while True:
+                second_name = input("Enter the second character's name: ").strip()
+                second_character = None
+
+                for character in characters:
+                    if character[1].lower() == second_name.lower():
+                        second_character = character
+                        break
+                if second_character is not None and second_character != first_character:
+                    break
+                if second_character == first_character:
+                    print("A character cannot battle themselves.")
+                else:
+                    print("Character not found. Please try again.")
+
+            return first_character, second_character
+
+        elif choice == "2":
+            first_character, second_character = random.sample(characters, 2)
+            print("\nThe computer selected:")
+            print(f"{first_character[1]} vs. {second_character[1]}!")
+            return first_character, second_character
+
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+def choose_battle_mode():
+    print("\n" + "=" * 50)
+    print("              CHOOSE YOUR BATTLE MODE")
+    print("=" * 50)
+    print("For this battle, you can either:")
+    print("1. Manual battle")
+    print("2. Automatic battle")
+    print()
+
+    while True:
+        choice = input("Choose battle mode (1-2): ").strip()
+        if choice == "1":
+            return "manual"
+        elif choice == "2":
+            return "automatic"
+        else:
+            print("Invalid choice. Please enter 1 or 2.")
+
+# battle function between characters
+def battle(character1, character2, mode, characters):
+    print("\n" + "=" * 100)
+    print("                    LET THE BATTLE BEGIN")
+    print("=" * 100)
+
+    print(f"\n{character1[1]} the {character1[2]}")
+    print("     VS.")
+    print(f"{character2[1]} the {character2[2]}")
+
+    print("\nGet ready!")
+    time.sleep(2)
+
+    # Store the original hit points.
+    max_hp1 = int(character1[7])
+    max_hp2 = int(character2[7])
+
+    # Current hit points change during the battle.
+    current_hp1 = max_hp1
+    current_hp2 = max_hp2
 
     round_number = 1
 
-# Continue battling until one character reaches 0 HP.
-    while character1["current_hp"] > 0 and character2["current_hp"] > 0:
-        print(f"\n--- Round {round_number} ---")
+    # Continue until one character reaches zero HP.
+    while current_hp1 > 0 and current_hp2 > 0:
+        print("\n" + "-" * 50)
+        print(f"ROUND {round_number}")
+        print("-" * 50)
 
-        # Character 1 attacks Character 2
-        attack1 = random.randint(5, 15) + character1["strength"] // 3 
-        character2["current_hp"] -= attack1
+        print(f"{character1[1]}: {current_hp1} HP")
+        print(f"{character2[1]}: {current_hp2} HP")
 
-        if character2["current_hp"] < 0: 
-            character2["current_hp"] = 0
-        print(f"{character1['name']} attacks for {attack1} damage!")
-        print(f"{character2['name']} has " f"{character2['current_hp']} HP remaining.")
+        time.sleep(1)
 
-        # Check if Character 2 has been defeated. 
-        if character2["current_hp"] <= 0: 
+        # Character 1 takes a turn.
+        action = battle_action(character1, mode)
+
+        if action == "run":
+            print(f"\n{character1[1]} ran away!")
+            print(f"{character2[1]} wins by default!")
+
+            character2[8] = str(int(character2[8]) + 1)
+            character1[9] = str(int(character1[9]) + 1)
+
+            improve_character(character2)
+
+            write_characters(characters)
+
+            return character2
+
+        elif action == "heal":
+            healing = random.randint(5, 12)
+            current_hp1 += healing
+
+            if current_hp1 > max_hp1:
+                current_hp1 = max_hp1
+            print(f"\n{character1[1]} heals for {healing} HP!")
+            print(f"{character1[1]} now has {current_hp1} HP.")
+
+        elif action == "strike":
+            damage = random.randint(5, 15) + int(character1[3]) // 3
+            current_hp2 -= damage
+
+            if current_hp2 < 0:
+                current_hp2 = 0
+            print(f"\n{character1[1]} strikes!")
+            print(f"{character1[1]} deals {damage} damage!")
+            print(f"{character2[1]} has {current_hp2} HP remaining.")
+
+        time.sleep(1)
+
+        # Check whether character 2 has been defeated.
+        if current_hp2 <= 0:
             break
 
-        # Character 2 attacks Character 1. 
-        attack2 = random.randint(5, 15) + character2["strength"] // 3 
-        character1["current_hp"] -= attack2
+        # Character 2 takes a turn.
+        action = battle_action(character2, mode)
 
-        if character1["current_hp"] < 0: 
-            character1["current_hp"] = 0 
-            print(f"{character2['name']} attacks for {attack2} damage!") 
-            print(f"{character1['name']} has " f"{character1['current_hp']} HP remaining.")
+        if action == "run":
+            print(f"\n{character2[1]} ran away!")
+            print(f"{character1[1]} wins by default!")
 
-        # Random chance for Character 1 to heal. 
-        if character1["current_hp"] > 0 and random.randint(1, 5) == 1: 
-            healing = random.randint(5, 12) 
-            character1["current_hp"] += healing 
-            if character1["current_hp"] > character1["hit_points"]:
-                character1["current_hp"] = character1["hit_points"] 
-                print(f"{character1['name']} magically heals " f"for {healing} HP!")
+            character1[8] = str(int(character1[8]) + 1)
+            character2[9] = str(int(character2[9]) + 1)
 
-        # Random chance for Character 2 to heal. 
-        if character2["current_hp"] > 0 and random.randint(1, 5) == 1: 
-            healing = random.randint(5, 12) 
-            character2["current_hp"] += healing 
-            if character2["current_hp"] > character2["hit_points"]: 
-                character2["current_hp"] = character2["hit_points"] 
-                print( f" {character2['name']} magically heals " f"for {healing} HP!" )
+            improve_character(character1)
+
+            write_characters(characters)
+
+            return character1
+
+        elif action == "heal":
+            healing = random.randint(5, 12)
+            current_hp2 += healing
+
+            if current_hp2 > max_hp2:
+                current_hp2 = max_hp2
+
+            print(f"\n{character2[1]} heals for {healing} HP!")
+            print(f"{character2[1]} now has {current_hp2} HP.")
+
+        elif action == "strike":
+            damage = random.randint(5, 15) + int(character2[3]) // 3
+
+            current_hp1 -= damage
+
+            if current_hp1 < 0:
+                current_hp1 = 0
+
+            print(f"\n{character2[1]} strikes!")
+            print(f"{character2[1]} gives {damage} damage!")
+            print(f"{character1[1]} has {current_hp1} HP remaining.")
+
+        time.sleep(1)
 
         round_number += 1
 
-    # Determine the winner. 
-    print("\n" + "=" * 55) 
-    print("BATTLE OVER!") 
-    print("=" * 55) 
-    if character1["current_hp"] > 0: 
-        print(f"WINNER: {character1['name']} " f"the {character1['type']}!" ) 
-    else: 
-        print(f"WINNER: {character2['name']} " f"the {character2['type']}!" )
+    # Determine the winner.
+    if current_hp1 > 0:
+        winner = character1
+        loser = character2
+    else:
+        winner = character2
+        loser = character1
 
+    print("\n" + "*" * 100)
+    print("                    BATTLE OVER!")
+    print("*" * 100)
+    print(f"\nWINNER: {winner[1]} the {winner[2]}!")
+    print(f"LOSER:  {loser[1]} the {loser[2]}!")
 
-# Create a random opponent. 
-def create_opponent():
-    opponent_names = ["Shadow", "Blaze", "Ragnar", "Nova", "Ember", "Spirit"] 
-    opponent_name = random.choice(opponent_names) 
-    opponent = create_character(opponent_name) 
-    print("\nYour opponent has been created!") 
-    display_character(opponent) 
-    return opponent 
+    # Update wins and losses.
+    winner[8] = str(int(winner[8]) + 1)
+    loser[9] = str(int(loser[9]) + 1)
+
+    # Improve the winner's stats.
+    improve_character(winner)
+
+    # Save the updated results to the CSV.
+    write_characters(characters)
+
+    return winner
+
+# Choose an action during a manual or automatic battle.
+def battle_action(character, mode):
+
+    if mode == "automatic":
+        actions = ["strike", "strike", "strike", "heal"]
+        return random.choice(actions)
+
+    print(f"\n{character[1]}'s turn!")
+    print("1. Strike")
+    print("2. Heal")
+    print("3. Run")
+
+    while True:
+        choice = input("Choose an action (1-3): ").strip()
+        if choice == "1":
+            return "strike"
+        elif choice == "2":
+            return "heal"
+        elif choice == "3":
+            return "run"
+        else:
+            print("Invalid choice. Please enter 1, 2, or 3.")
+
+# Improve one random stat after a character wins a battle.
+def improve_character(character):
+    stat_choices = [
+        ("Strength", 3),
+        ("Intellect", 4),
+        ("Charisma", 5),
+        ("Speed", 6)]
+    stat_name, stat_index = random.choice(stat_choices)
+
+    character[stat_index] = str(int(character[stat_index]) + 1)
+
+    print(f"\n⭐ {character[1]} has improved!")
+    print(f"{stat_name} increased to {character[stat_index]}!")
 
 
 def main():
     title()
     description()
 
-    player_name = input("Before we get started, what is your name? ")
+    player_name = input("Before we get started, what is your name? ").strip()
 
     if player_name == "":
         player_name = "Player"
-    print(f"Hello, {player_name}! Welcome to the battleground...")
 
+    print(f"\nHello, {player_name}! "
+        "Welcome to the battleground!")
+
+    # Load characters from the CSV file.
     characters = read_characters()
-    list_characters(characters)
 
-    display_menu()
     while True:
-        command = input("Command: ")
-        if command == "list":
-            list(characters)
-        elif command == "add":
-            add(characters)
-        elif command == "del":
-            delete(characters)
-        elif command == "find":
+        display_menu()
+
+        choice = input(
+            "Please choose an option (1-6): ").strip()
+
+        # List all characters.
+        if choice == "1":
+            list_characters(characters)
+
+        # Create a new character.
+        elif choice == "2":
+            add_character(characters)
+
+        # Delete a character.
+        elif choice == "3":
+            delete_character(characters)
+
+        # Search for a character.
+        elif choice == "4":
             find_by_name(characters)
-        elif command == "play":
-            play = input(f"{player_name}, would you like to generate a character? (y/n): ")
-            while play.lower() == "y":
 
-                # create player character
-                name = get_character_name()
-                player = create_character(name)
-            
-                # Display the player's character.
-                print("\nYour character has been created!")
-                display_character(player)
+        # Start a battle.
+        elif choice == "5":
+            character1, character2 = choose_battle_characters(characters)
 
-                # create list for the input of character information
-                character = []
-                character.append(name)
-                character.append()
-            
-                # Ask whether the player wants to battle
-                battle_choice = input(f"\n{player_name}, would you like to battle another character? (y/n): ")
-                while battle_choice.lower() == "y":
-                    # Create a random opponent.
-                    opponent = create_opponent()
-            
-                    # Run the battle.
-                    battle(player, opponent)
-            
-                    # Ask if the player wants another battle.
-                    battle_choice = input(f"\n{player_name}, would you like to battle another character? (y/n): ")
-                    print("Darn, no more battles today.")
-            
-                    # Ask player if they want a completely new character
-                    play = input(f"\n{player_name}, would you like to create another character and play again? (y/n): ")
-        elif command == "exit":
+            if character1 is not None and character2 is not None:
+                mode = choose_battle_mode()
+                battle(
+                    character1,
+                    character2,
+                    mode,
+                    characters)
+
+        # Exit the program.
+        elif choice == "6":
+            print(f"\nThank you for playing, {player_name}!")
+            print("Best of luck in your future battles!")
             break
+
+        # invalid menu choice
         else:
-            print("Not a valid command. Please try again.\n")
-    print(f"\nThank you {player_name} for visting the Random Character Generator - Fantasy Edition!")
-    print("Best of luck on your future endeavors.\n" \
-    "Just remember, you are a hero to us regardless of your battle outcomes. Bye!!")   
+            print("\nInvalid choice. Please enter a number from 1 to 6.")
+    print()        
+    print("Just remember, you are a hero to us regardless of your battle outcomes. Bye!!")   
     print()
     
 if __name__ == "__main__":
